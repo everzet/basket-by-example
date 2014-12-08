@@ -61,4 +61,12 @@ class WebBasketContext extends RawMinkContext implements Context, SnippetAccepti
         $productElement = $this->getSession()->getPage()->find('css', ".product:contains('$sku')");
         $productElement->clickLink('Add to basket');
     }
+
+    /**
+     * @Then the total price of my basket should be £:cost
+     */
+    public function theTotalPriceOfMyBasketShouldBePs($cost)
+    {
+        $this->assertSession()->pageTextContains("Total price of basket: £$cost");
+    }
 }
