@@ -11,7 +11,8 @@ class Basket
 
     public function addProductFromCatalogue(Sku $sku, Catalogue $catalogue)
     {
-        // TODO: write logic here
+        $aProduct = $catalogue->getProduct($sku);
+        $this->totalPrice = $this->totalPrice->add($aProduct->getCost());
     }
 
     public function getTotalPrice()
@@ -19,3 +20,4 @@ class Basket
         return $this->totalPrice;
     }
 }
+
