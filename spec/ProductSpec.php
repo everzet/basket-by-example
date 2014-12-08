@@ -12,8 +12,8 @@ class ProductSpec extends ObjectBehavior
         $this->beConstructedThrough('withSkuAndCost', [new \Sku('PR1'), new \Cost(12.3)]);
     }
 
-    function it_is_initializable()
+    function it_has_cost()
     {
-        $this->shouldHaveType('Product');
+        $this->getCost()->shouldBeLike(new \Cost(12.3));
     }
 }

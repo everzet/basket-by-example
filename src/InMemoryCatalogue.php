@@ -6,4 +6,9 @@ class InMemoryCatalogue implements Catalogue
     {
         // TODO: Implement addProduct() method.
     }
+
+    public function getProduct(Sku $sku)
+    {
+        // TODO: Implement getProduct() method.
+    }
 }

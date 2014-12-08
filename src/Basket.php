@@ -20,4 +20,3 @@ class Basket
         return $this->totalPrice;
     }
 }
-

@@ -2,13 +2,20 @@
 
 class Product
 {
+    private $sku;
+    private $cost;
 
-    public static function withSkuAndCost($argument1, $argument2)
+    public static function withSkuAndCost(Sku $sku, Cost $cost)
     {
         $product = new Product();
-
-        // TODO: write logic here
+        $product->sku = $sku;
+        $product->cost = $cost;
 
         return $product;
+    }
+
+    public function getCost()
+    {
+        return $this->cost;
     }
 }
