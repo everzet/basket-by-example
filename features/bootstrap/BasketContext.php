@@ -9,6 +9,8 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  */
 class BasketContext implements Context, SnippetAcceptingContext
 {
+    private $catalogue;
+
     /**
      * Initializes context.
      *
@@ -18,6 +20,7 @@ class BasketContext implements Context, SnippetAcceptingContext
      */
     public function __construct()
     {
+        $this->catalogue = new InMemoryCatalogue();
     }
 
     /**
@@ -42,17 +45,16 @@ class BasketContext implements Context, SnippetAcceptingContext
     public function thereIsAProductWithSkuAndACostOfPsInTheCatalogue(Sku $aSku, Cost $aCost)
     {
         $aProduct = Product::withSkuAndCost($aSku, $aCost);
-
-        $theCatalogue = new InMemoryCatalogue();
-        $theCatalogue->addProduct($aProduct);
+        $this->catalogue->addProduct($aProduct);
     }
 
     /**
-     * @When I add the product with SKU :arg1 from the catalogue to my basket
+     * @When I add the product with SKU :aSku from the catalogue to my basket
      */
-    public function iAddTheProductWithSkuFromTheCatalogueToMyBasket($arg1)
+    public function iAddTheProductWithSkuFromTheCatalogueToMyBasket(Sku $aSku)
     {
-        throw new PendingException();
+        $myBasket = new Basket();
+        $myBasket->addProductFromTheCatalogue($aSku, $this->catalogue);
     }
 
     /**
