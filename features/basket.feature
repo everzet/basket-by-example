@@ -8,6 +8,7 @@ Feature: Applying VAT and a delivery costs to the basket
     - Delivery cost for a basket > £10 is £2
     - Delivery cost for a basket < £10 is £3
 
+  @critical
   Scenario: Product costing less than £10 results in delivery cost of £3
     Given there is a product with SKU "RS1" and a cost of £5 in the catalogue
     When I add the product with SKU "RS1" from the catalogue to my basket
