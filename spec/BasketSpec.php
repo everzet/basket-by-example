@@ -16,4 +16,16 @@ class BasketSpec extends ObjectBehavior
     {
         $this->getTotalPrice()->shouldBeLike(new \Cost(0.0));
     }
+
+    function it_calculates_the_price_based_on_the_products_cost(\Catalogue $catalogue)
+    {
+        $aSku = new \Sku('PSR1');
+        $aCost = new \Cost(5.0);
+        $catalogue->getProduct($aSku)->willReturn(\Product::withSkuAndCost($aSku, $aCost));
+
+        $this->addProductFromCatalogue($aSku, $catalogue);
+
+        $this->getTotalPrice()->shouldBeLike(new \Cost(9.0));
+    }
 }
+
