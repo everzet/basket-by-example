@@ -1,0 +1,4 @@
+default:
+    suites:
+        domain:
+            contexts: [ BasketContext ]
