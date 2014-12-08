@@ -7,8 +7,13 @@ use Prophecy\Argument;
 
 class SkuSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    function let()
     {
-        $this->shouldHaveType('Sku');
+        $this->beConstructedWith('PSR1');
+    }
+
+    function it_can_be_converted_to_string()
+    {
+        $this->__toString()->shouldBeLike('PSR1');
     }
 }

@@ -14,6 +14,11 @@ class Product
         return $product;
     }
 
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
     public function getCost()
     {
         return $this->cost;

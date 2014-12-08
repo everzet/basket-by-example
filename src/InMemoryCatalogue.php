@@ -17,4 +17,9 @@ class InMemoryCatalogue implements Catalogue
     {
         return $this->product;
     }
+
+    public function getAllProducts()
+    {
+        return [$this->product];
+    }
 }

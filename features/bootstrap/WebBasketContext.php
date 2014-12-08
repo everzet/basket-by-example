@@ -18,7 +18,7 @@ class WebBasketContext extends RawMinkContext implements Context, SnippetAccepti
      */
     public function __construct()
     {
-        $this->catalogue = new InMemoryCatalogue();
+        $this->catalogue = new FilesystemCatalogue();
     }
 
     /**
