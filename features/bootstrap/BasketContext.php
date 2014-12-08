@@ -54,7 +54,7 @@ class BasketContext implements Context, SnippetAcceptingContext
     public function iAddTheProductWithSkuFromTheCatalogueToMyBasket(Sku $aSku)
     {
         $myBasket = new Basket();
-        $myBasket->addProductFromTheCatalogue($aSku, $this->catalogue);
+        $myBasket->addProductFromCatalogue($aSku, $this->catalogue);
     }
 
     /**
