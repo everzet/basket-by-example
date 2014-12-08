@@ -2,6 +2,13 @@
 
 class Basket
 {
+    private $totalPrice;
+
+    public function __construct()
+    {
+        $this->totalPrice = new Cost(0.0);
+    }
+
     public function addProductFromCatalogue(Sku $sku, Catalogue $catalogue)
     {
         // TODO: write logic here
@@ -9,6 +16,6 @@ class Basket
 
     public function getTotalPrice()
     {
-        return new Cost(0.0);
+        return $this->totalPrice;
     }
 }
