@@ -11,4 +11,9 @@ class BasketSpec extends ObjectBehavior
     {
         $this->addProductFromCatalogue(new \Sku('PR1'), $catalogue);
     }
+
+    function it_has_a_zero_price_by_default()
+    {
+        $this->getTotalPrice()->shouldBeLike(new \Cost(0.0));
+    }
 }

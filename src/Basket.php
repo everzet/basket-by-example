@@ -6,4 +6,9 @@ class Basket
     {
         // TODO: write logic here
     }
+
+    public function getTotalPrice()
+    {
+        return new Cost(0.0);
+    }
 }
