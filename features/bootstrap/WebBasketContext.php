@@ -2,11 +2,12 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class WebBasketContext implements Context, SnippetAcceptingContext
+class WebBasketContext extends RawMinkContext implements Context, SnippetAcceptingContext
 {
     /**
      * Initializes context.
@@ -43,5 +44,21 @@ class WebBasketContext implements Context, SnippetAcceptingContext
     {
         $aProduct = Product::withSkuAndCost($aSku, $aCost);
         $this->catalogue->addProduct($aProduct);
+    }
+
+    /**
+     * @When I add the product with SKU :sku from the catalogue to my basket
+     */
+    public function iAddTheProductWithSkuFromTheCatalogueToMyBasket($sku)
+    {
+        // Visit the page
+        $this->visitPath('/catalogue');
+
+        // Check that product is on the page
+        $this->assertSession()->elementExists('css', ".product:contains('$sku')");
+
+        // Click "Add to basket" in the product area
+        $productElement = $this->getSession()->getPage()->find('css', ".product:contains('$sku')");
+        $productElement->clickLink('Add to basket');
     }
 }
