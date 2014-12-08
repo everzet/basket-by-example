@@ -17,5 +17,31 @@ class WebBasketContext implements Context, SnippetAcceptingContext
      */
     public function __construct()
     {
+        $this->catalogue = new InMemoryCatalogue();
+    }
+
+    /**
+     * @Transform :aSku
+     */
+    public function transformStringToASku($string)
+    {
+        return new Sku($string);
+    }
+
+    /**
+     * @Transform :aCost
+     */
+    public function transformStringToACost($string)
+    {
+        return new Cost($string);
+    }
+
+    /**
+     * @Given there is a product with SKU :aSku and a cost of £:aCost in the catalogue
+     */
+    public function thereIsAProductWithSkuAndACostOfPsInTheCatalogue(Sku $aSku, Cost $aCost)
+    {
+        $aProduct = Product::withSkuAndCost($aSku, $aCost);
+        $this->catalogue->addProduct($aProduct);
     }
 }
