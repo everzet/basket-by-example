@@ -17,10 +17,27 @@ class Basket
 
     public function getTotalPrice()
     {
-        if (0 == $this->totalPrice->toFloat()) {
-            return $this->totalPrice;
+        $totalPrice = $this->totalPrice;
+
+        if (0 == $totalPrice->toFloat()) {
+            return $totalPrice;
         }
 
-        return $this->totalPrice->addPercent(20)->add(new \Cost(3.0));
+        $priceWithVat = $totalPrice->addPercent(20);
+        $deliveryCost = $this->calculateDeliveryCost();
+
+        return $priceWithVat->add($deliveryCost);
+    }
+
+    /**
+     * @return Cost
+     */
+    private function calculateDeliveryCost()
+    {
+        if ($this->totalPrice->toFloat() > 10.0) {
+            return new \Cost(2.0);
+        }
+
+        return new \Cost(3.0);
     }
 }
