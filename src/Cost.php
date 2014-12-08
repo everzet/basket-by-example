@@ -13,4 +13,9 @@ class Cost
     {
         return $this->float;
     }
+
+    public function add(Cost $anotherCost)
+    {
+        return new Cost($this->float + $anotherCost->float);
+    }
 }
