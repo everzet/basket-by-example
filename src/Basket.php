@@ -17,6 +17,10 @@ class Basket
 
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        if (0 == $this->totalPrice->toFloat()) {
+            return $this->totalPrice;
+        }
+
+        return $this->totalPrice->addPercent(20)->add(new \Cost(3.0));
     }
 }
