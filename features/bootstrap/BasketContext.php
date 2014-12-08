@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 
@@ -10,6 +9,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 class BasketContext implements Context, SnippetAcceptingContext
 {
     private $catalogue;
+    private $basket;
 
     /**
      * Initializes context.
@@ -21,6 +21,7 @@ class BasketContext implements Context, SnippetAcceptingContext
     public function __construct()
     {
         $this->catalogue = new InMemoryCatalogue();
+        $this->basket = new Basket();
     }
 
     /**
@@ -53,15 +54,14 @@ class BasketContext implements Context, SnippetAcceptingContext
      */
     public function iAddTheProductWithSkuFromTheCatalogueToMyBasket(Sku $aSku)
     {
-        $myBasket = new Basket();
-        $myBasket->addProductFromCatalogue($aSku, $this->catalogue);
+        $this->basket->addProductFromCatalogue($aSku, $this->catalogue);
     }
 
     /**
-     * @Then the total price of my basket should be £:arg1
+     * @Then the total price of my basket should be £:aCost
      */
-    public function theTotalPriceOfMyBasketShouldBePs($arg1)
+    public function theTotalPriceOfMyBasketShouldBePs(Cost $aCost)
     {
-        throw new PendingException();
+        PHPUnit_Framework_Assert::assertEquals($aCost, $this->basket->getTotalPrice());
     }
 }
