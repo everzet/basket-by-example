@@ -9,9 +9,8 @@ class Basket
         $this->totalPrice = new Cost(0.0);
     }
 
-    public function addProductFromCatalogue(Sku $sku, Catalogue $catalogue)
+    public function addProduct(Product $aProduct)
     {
-        $aProduct = $catalogue->getProduct($sku);
         $this->totalPrice = $this->totalPrice->add($aProduct->getCost());
     }
 

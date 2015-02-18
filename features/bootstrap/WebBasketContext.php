@@ -2,12 +2,12 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\MinkExtension\Context\MinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class WebBasketContext extends RawMinkContext implements Context, SnippetAcceptingContext
+class WebBasketContext extends MinkContext implements Context, SnippetAcceptingContext
 {
     /**
      * Initializes context.
@@ -18,7 +18,7 @@ class WebBasketContext extends RawMinkContext implements Context, SnippetAccepti
      */
     public function __construct()
     {
-        $this->catalogue = new FilesystemCatalogue();
+        $this->catalogue = new Database();
     }
 
     /**
@@ -38,35 +38,30 @@ class WebBasketContext extends RawMinkContext implements Context, SnippetAccepti
     }
 
     /**
+     * @AfterScenario
+     */
+    public function cleanupDatabase()
+    {
+        $this->catalogue->update('DELETE FROM catalogue');
+    }
+
+    /**
      * @Given there is a product with SKU :aSku and a cost of £:aCost in the catalogue
      */
     public function thereIsAProductWithSkuAndACostOfPsInTheCatalogue(Sku $aSku, Cost $aCost)
     {
         $aProduct = Product::withSkuAndCost($aSku, $aCost);
-        $this->catalogue->addProduct($aProduct);
+        $this->catalogue->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
+            'sku'     => (string)$aSku,
+            'product' => serialize($aProduct)
+        ]);
     }
 
     /**
-     * @When I add the product with SKU :sku from the catalogue to my basket
+     * @When I click :link inside :css
      */
-    public function iAddTheProductWithSkuFromTheCatalogueToMyBasket($sku)
+    public function iClickInside($link, $css)
     {
-        // Visit the page
-        $this->visitPath('/catalogue');
-
-        // Check that product is on the page
-        $this->assertSession()->elementExists('css', ".product:contains('$sku')");
-
-        // Click "Add to basket" in the product area
-        $productElement = $this->getSession()->getPage()->find('css', ".product:contains('$sku')");
-        $productElement->clickLink('Add to basket');
-    }
-
-    /**
-     * @Then the total price of my basket should be £:cost
-     */
-    public function theTotalPriceOfMyBasketShouldBePs($cost)
-    {
-        $this->assertSession()->pageTextContains("Total price of basket: £$cost");
+        $this->getSession()->getPage()->find('css', $css)->clickLink($link);
     }
 }

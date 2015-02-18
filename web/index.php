@@ -4,15 +4,27 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new Silex\Application();
 $app['debug'] = true;
-$cat = new FilesystemCatalogue();
+$catalogue = new Database();
 
 $app->get(
     '/catalogue',
-    function () use ($cat) {
+    function () use ($catalogue) {
+        $products = array_map(
+            function ($data) {
+                return unserialize($data['product']);
+            }, iterator_to_array($catalogue->query('SELECT product FROM catalogue'))
+        );
+
         $page = "<ul>";
-        foreach ($cat->getAllProducts() as $product) {
-            $page .= "<li class='product'>{$product->getSku()}<a
-            href='/catalogue/{$product->getSku()}/add-to-basket'>Add to basket</a></li>";
+        foreach ($products as $product) {
+            $page .= <<<HTML
+<li class='product'>
+    {$product->getSku()}
+    <a href='/catalogue/{$product->getSku()}/add-to-basket'>
+        Add to basket
+    </a>
+</li>
+HTML;
         }
         $page .= "</ul>";
 
@@ -22,9 +34,14 @@ $app->get(
 
 $app->get(
     '/catalogue/{sku}/add-to-basket',
-    function ($sku) use ($cat) {
+    function ($sku) use ($catalogue) {
+        $sku = new Sku($sku);
+
+        $productData = $catalogue->query('SELECT product FROM catalogue WHERE sku = :sku', ['sku' => (string)$sku]);
+        $product = unserialize($productData->fetch()['product']);
+
         $basket = new Basket();
-        $basket->addProductFromCatalogue(new Sku($sku), $cat);
+        $basket->addProduct($product);
 
         return "Total price of basket: £{$basket->getTotalPrice()->toFloat()}";
     }
