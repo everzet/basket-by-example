@@ -31,11 +31,21 @@ class WebBasketContext extends MinkContext implements Context
     }
 
     /**
-     * @When I click :css
+     * @When I add :sku to my basket
      */
-    public function iClick($css)
+    public function iAdd(string $sku)
     {
-        $this->getSession()->getPage()->find('css', $css)->click();
+        $this->visitPath('/catalogue');
+        $this->getSession()->getPage()->find('css', ".product:contains('{$sku}')")->click();
+    }
+
+    /**
+     * @Then the total basket cost should be £:cost
+     */
+    public function theTotalBasketCostShouldBe(float $cost)
+    {
+        $this->assertSession()->addressMatches("#^/catalogue/RS\d/add-to-basket$#");
+        $this->assertSession()->pageTextContains("Total cost: £{$cost}");
     }
 
     /**
