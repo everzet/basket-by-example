@@ -7,14 +7,15 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 use Web\Database;
+use Web\DatabaseCatalogue;
 
 class WebBasketContext extends MinkContext implements Context
 {
-    private $db;
+    private $catalogue;
 
     public function __construct(string $env)
     {
-        $this->db = new Database(__DIR__ . "/../../db_{$env}.sqlite");
+        $this->catalogue = new DatabaseCatalogue(new Database(__DIR__ . "/../../db_{$env}.sqlite"));
     }
 
     /**
@@ -23,11 +24,7 @@ class WebBasketContext extends MinkContext implements Context
     public function productWasAddedToTheCatalogue(string $sku, float $cost)
     {
         $aProduct = new Product(new Sku($sku), new Cost($cost));
-
-        $this->db->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
-            'sku'     => $aProduct->sku(),
-            'product' => $aProduct
-        ]);
+        $this->catalogue->addProduct($aProduct);
     }
 
     /**
@@ -53,6 +50,6 @@ class WebBasketContext extends MinkContext implements Context
      */
     public function cleanup()
     {
-        $this->db->update('DELETE FROM catalogue');
+        $this->catalogue->deleteProducts();
     }
 }
