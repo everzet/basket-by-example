@@ -3,6 +3,9 @@ default:
         web:
             contexts:
                 - WebBasketContext: [ 'test' ]
+        domain:
+            contexts:
+                - DomainBasketContext
 
     extensions:
         Behat\MinkExtension:
