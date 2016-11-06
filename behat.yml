@@ -1,7 +1,8 @@
 default:
     suites:
         web:
-            contexts: [ 'WebBasketContext' ]
+            contexts:
+                - WebBasketContext: [ 'test' ]
 
     extensions:
         Behat\MinkExtension:

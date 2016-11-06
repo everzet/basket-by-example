@@ -12,9 +12,9 @@ class WebBasketContext extends MinkContext implements Context
 {
     private $db;
 
-    public function __construct()
+    public function __construct(string $env)
     {
-        $this->db = new Sqlite(__DIR__ . '/../../db_test.sqlite');
+        $this->db = new Sqlite(__DIR__ . "/../../db_{$env}.sqlite");
     }
 
     /**
