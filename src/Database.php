@@ -1,15 +1,15 @@
 <?php
 
+use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\DriverManager;
+
 class Database
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
     private $connection;
 
     public function __construct()
     {
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection([
+        $this->connection = DriverManager::getConnection([
             'user'     => 'root',
             'password' => null,
             'path'     => __DIR__ . '/../db.sqlite',
@@ -17,12 +17,12 @@ class Database
         ]);
     }
 
-    public function query($query, array $params = array())
+    public function query(string $query, array $params = array()) : Statement
     {
         return $this->connection->executeQuery($query, $params);
     }
 
-    public function update($query, array $params = array())
+    public function update(string $query, array $params = array())
     {
         $this->connection->executeUpdate($query, $params);
     }

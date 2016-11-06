@@ -4,23 +4,33 @@ class Cost
 {
     private $float;
 
-    public function __construct($string)
+    public function __construct(float $float = 0.0)
     {
-        $this->float = floatval($string);
+        $this->float = $float;
     }
 
-    public function toFloat()
-    {
-        return $this->float;
-    }
-
-    public function add(Cost $anotherCost)
+    public function add(Cost $anotherCost) : self
     {
         return new Cost($this->float + $anotherCost->float);
     }
 
-    public function addPercent($percent)
+    public function addPercent($percent) : self
     {
         return new Cost($this->float + (($this->float / 100) * $percent));
+    }
+
+    public function isFree() : bool
+    {
+        return 0 == $this->float;
+    }
+
+    public function isGreaterThan(Cost $threshold) : bool
+    {
+        return $this->float > $threshold->float;
+    }
+
+    public function toFloat() : float
+    {
+        return $this->float;
     }
 }

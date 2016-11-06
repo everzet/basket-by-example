@@ -19,8 +19,8 @@ $app->get(
         foreach ($products as $product) {
             $page .= <<<HTML
 <li class='product'>
-    {$product->getSku()}
-    <a href='/catalogue/{$product->getSku()}/add-to-basket'>
+    {$product->sku()}
+    <a href='/catalogue/{$product->sku()}/add-to-basket'>
         Add to basket
     </a>
 </li>
@@ -43,7 +43,7 @@ $app->get(
         $basket = new Basket();
         $basket->addProduct($product);
 
-        return "Total price of basket: £{$basket->getTotalPrice()->toFloat()}";
+        return "Total price of basket: £{$basket->total()->toFloat()}";
     }
 );
 

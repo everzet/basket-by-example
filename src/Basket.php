@@ -2,41 +2,53 @@
 
 class Basket
 {
-    private $totalPrice;
+    private $total;
 
     public function __construct()
     {
-        $this->totalPrice = new Cost(0.0);
+        $this->total = new Cost();
     }
 
     public function addProduct(Product $aProduct)
     {
-        $this->totalPrice = $this->totalPrice->add($aProduct->getCost());
+        $this->total = $this->total->add($aProduct->cost());
     }
 
-    public function getTotalPrice()
+    public function total() : Cost
     {
-        $totalPrice = $this->totalPrice;
-
-        if (0 == $totalPrice->toFloat()) {
-            return $totalPrice;
+        if ($this->total->isFree()) {
+            return $this->total;
         }
 
-        $priceWithVat = $totalPrice->addPercent(20);
-        $deliveryCost = $this->calculateDeliveryCost();
-
-        return $priceWithVat->add($deliveryCost);
+        return $this->totalWithVAT()->add($this->deliveryCost());
     }
 
-    /**
-     * @return Cost
-     */
-    private function calculateDeliveryCost()
+    private function totalWithVAT() : Cost
     {
-        if ($this->totalPrice->toFloat() > 10.0) {
-            return new \Cost(2.0);
+        return $this->total->addPercent(20);
+    }
+
+    private function deliveryCost() : Cost
+    {
+        if ($this->total->isGreaterThan($this->cheapDeliveryThreshold())) {
+            return $this->cheapDeliveryCost();
         }
 
-        return new \Cost(3.0);
+        return $this->normalDeliveryCost();
+    }
+
+    private function cheapDeliveryThreshold() : Cost
+    {
+        return new Cost(10);
+    }
+
+    private function cheapDeliveryCost() : Cost
+    {
+        return new Cost(2);
+    }
+
+    private function normalDeliveryCost() : Cost
+    {
+        return new Cost(3);
     }
 }
