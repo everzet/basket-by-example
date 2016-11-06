@@ -4,15 +4,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new Silex\Application();
 $app['debug'] = true;
-$catalogue = new Database();
+$db = new Sqlite();
 
 $app->get(
     '/catalogue',
-    function () use ($catalogue) {
+    function () use ($db) {
         $products = array_map(
             function ($data) {
                 return unserialize($data['product']);
-            }, iterator_to_array($catalogue->query('SELECT product FROM catalogue'))
+            }, iterator_to_array($db->query('SELECT product FROM catalogue'))
         );
 
         $page = "<ul>";
@@ -34,16 +34,16 @@ HTML;
 
 $app->get(
     '/catalogue/{sku}/add-to-basket',
-    function ($sku) use ($catalogue) {
+    function ($sku) use ($db) {
         $sku = new Sku($sku);
 
-        $productData = $catalogue->query('SELECT product FROM catalogue WHERE sku = :sku', ['sku' => (string)$sku]);
+        $productData = $db->query('SELECT product FROM catalogue WHERE sku = :sku', ['sku' => (string)$sku]);
         $product = unserialize($productData->fetch()['product']);
 
         $basket = new Basket();
         $basket->addProduct($product);
 
-        return "Total price of basket: £{$basket->total()->toFloat()}";
+        return "Total cost: £{$basket->total()->toFloat()}";
     }
 );
 

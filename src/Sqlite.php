@@ -3,7 +3,7 @@
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
 
-class Database
+class Sqlite
 {
     private $connection;
 

@@ -1,40 +1,16 @@
 <?php
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 
-/**
- * Defines application features from the specific context.
- */
-class WebBasketContext extends MinkContext implements Context, SnippetAcceptingContext
+class WebBasketContext extends MinkContext implements Context
 {
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
+    private $db;
+
     public function __construct()
     {
-        $this->catalogue = new Database();
-    }
-
-    /**
-     * @Transform :aSku
-     */
-    public function transformStringToASku($string)
-    {
-        return new Sku($string);
-    }
-
-    /**
-     * @Transform :aCost
-     */
-    public function transformStringToACost($string)
-    {
-        return new Cost($string);
+        $this->db = new Sqlite();
     }
 
     /**
@@ -42,18 +18,24 @@ class WebBasketContext extends MinkContext implements Context, SnippetAcceptingC
      */
     public function cleanupDatabase()
     {
-        $this->catalogue->update('DELETE FROM catalogue');
+        $this->db->update('DELETE FROM catalogue');
     }
 
     /**
-     * @Given there is a product with SKU :aSku and a cost of £:aCost in the catalogue
+     * @Given there is a catalogue item:
      */
-    public function thereIsAProductWithSkuAndACostOfPsInTheCatalogue(Sku $aSku, Cost $aCost)
+    public function thereIsAProduct(TableNode $table)
     {
-        $aProduct = Product::withSkuAndCost($aSku, $aCost);
-        $this->catalogue->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
-            'sku'     => (string)$aSku,
-            'product' => serialize($aProduct)
+        $productHash = $table->getRowsHash();
+
+        $aProduct = new CatalogueRecord(
+            new Sku($productHash['sku']),
+            new Cost(mb_substr($productHash['cost'], 1))
+        );
+
+        $this->db->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
+            'sku'     => $aProduct->sku(),
+            'product' => $aProduct
         ]);
     }
 
