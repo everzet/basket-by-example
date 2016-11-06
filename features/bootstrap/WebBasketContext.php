@@ -18,16 +18,11 @@ class WebBasketContext extends MinkContext implements Context
     }
 
     /**
-     * @Given there is a catalogue item:
+     * @Given a product with sku :sku and a cost of £:cost was added to the catalogue
      */
-    public function thereIsAProduct(TableNode $table)
+    public function productWasAddedToTheCatalogue(string $sku, float $cost)
     {
-        $productHash = $table->getRowsHash();
-
-        $aProduct = new Product(
-            new Sku($productHash['sku']),
-            new Cost(mb_substr($productHash['cost'], 1))
-        );
+        $aProduct = new Product(new Sku($sku), new Cost($cost));
 
         $this->db->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
             'sku'     => $aProduct->sku(),
