@@ -18,14 +18,6 @@ class WebBasketContext extends MinkContext implements Context
     }
 
     /**
-     * @AfterScenario
-     */
-    public function cleanup()
-    {
-        $this->db->update('DELETE FROM catalogue');
-    }
-
-    /**
      * @Given there is a catalogue item:
      */
     public function thereIsAProduct(TableNode $table)
@@ -49,5 +41,13 @@ class WebBasketContext extends MinkContext implements Context
     public function iClick($css)
     {
         $this->getSession()->getPage()->find('css', $css)->click();
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function cleanup()
+    {
+        $this->db->update('DELETE FROM catalogue');
     }
 }
