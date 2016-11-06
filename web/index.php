@@ -2,6 +2,7 @@
 
 use Web\Controller;
 use Web\Database;
+use Web\DatabaseCatalogue;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -15,7 +16,8 @@ if (!defined('DATABASE')) {
     define('DATABASE', __DIR__ . "/../db_prod.sqlite");
 }
 
-$controller = new Controller(new Database(DATABASE));
+$sqlite = new Database(DATABASE);
+$controller = new Controller(new DatabaseCatalogue($sqlite));
 
 $app->get('/', function () use ($app) {
     return $app->redirect(ROOT_CONTROLLER . "/catalogue");
