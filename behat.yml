@@ -1,6 +1,8 @@
 default:
     suites:
         web:
+            filters:
+                tags: '@e2e'
             contexts:
                 - WebBasketContext: [ 'test' ]
         domain:

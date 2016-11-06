@@ -15,6 +15,7 @@ Feature:
     When I add "RS3" to my basket
     Then the total basket cost should be £15
 
+  @e2e
   Scenario:
     Given a product with sku "RS4" and a cost of £9 was added to the catalogue
     When I add "RS4" to my basket
