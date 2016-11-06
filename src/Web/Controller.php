@@ -1,6 +1,11 @@
 <?php
 
-class BasketController
+namespace Web;
+
+use Basket\Basket;
+use Basket\Product;
+
+class Controller
 {
     private $db;
 
@@ -14,7 +19,7 @@ class BasketController
         $productStrings = $this->db->query('SELECT product FROM catalogue');
         $products = array_map([Product::class, 'fromString'], $productStrings);
 
-        return $this->renderTemplate('catalogue', ['products' => $products]);
+        return render_template('catalogue', ['products' => $products]);
     }
 
     public function addToBasket(string $sku)
@@ -25,16 +30,6 @@ class BasketController
         $basket = new Basket();
         $basket->addProduct($aProduct);
 
-        return $this->renderTemplate('basket', ['basket' => $basket]);
-    }
-
-    private function renderTemplate(string $template, array $parameters) : string
-    {
-        ob_start();
-
-        extract($parameters);
-        include(__DIR__ . '/../templates/' . $template . '.html.php');
-
-        return ob_get_clean();
+        return render_template('basket', ['basket' => $basket]);
     }
 }

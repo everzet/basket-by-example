@@ -1,5 +1,7 @@
 <?php
 
+namespace Basket;
+
 class Cost
 {
     private $float;
@@ -31,6 +33,6 @@ class Cost
 
     public function __toString()
     {
-        return (string) $this->float;
+        return (string)$this->float;
     }
 }

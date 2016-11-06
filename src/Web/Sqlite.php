@@ -1,6 +1,9 @@
 <?php
 
+namespace Web;
+
 use Doctrine\DBAL\DriverManager;
+use PDO;
 
 class Sqlite
 {
@@ -9,10 +12,10 @@ class Sqlite
     public function __construct(string $db)
     {
         $this->connection = DriverManager::getConnection([
-            'user'     => 'root',
+            'user' => 'root',
             'password' => null,
-            'path'     => $db,
-            'driver'   => 'pdo_sqlite',
+            'path' => $db,
+            'driver' => 'pdo_sqlite',
         ]);
     }
 

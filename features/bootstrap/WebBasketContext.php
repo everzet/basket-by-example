@@ -1,8 +1,12 @@
 <?php
 
+use Basket\Cost;
+use Basket\Product;
+use Basket\Sku;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
+use Web\Sqlite;
 
 class WebBasketContext extends MinkContext implements Context
 {

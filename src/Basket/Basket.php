@@ -1,5 +1,7 @@
 <?php
 
+namespace Basket;
+
 class Basket
 {
     private $total;
