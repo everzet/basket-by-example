@@ -1,6 +1,6 @@
 <?php
 
-class CatalogueRecord
+class Product
 {
     private $sku;
     private $cost;
@@ -9,6 +9,11 @@ class CatalogueRecord
     {
         $this->sku = $sku;
         $this->cost = $cost;
+    }
+
+    public static function fromString(string $string)
+    {
+        return unserialize($string);
     }
 
     public function sku() : Sku

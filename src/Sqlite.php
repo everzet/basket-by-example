@@ -17,9 +17,9 @@ class Sqlite
         ]);
     }
 
-    public function query(string $query, array $params = array()) : Statement
+    public function query(string $query, array $params = array()) : array
     {
-        return $this->connection->executeQuery($query, $params);
+        return $this->connection->executeQuery($query, $params)->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public function update(string $query, array $params = array())

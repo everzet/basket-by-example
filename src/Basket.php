@@ -9,7 +9,7 @@ class Basket
         $this->total = new Cost();
     }
 
-    public function addProduct(CatalogueRecord $aProduct)
+    public function addProduct(Product $aProduct)
     {
         $this->total = $this->total->add($aProduct->cost());
     }

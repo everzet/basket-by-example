@@ -16,7 +16,7 @@ class WebBasketContext extends MinkContext implements Context
     /**
      * @AfterScenario
      */
-    public function cleanupDatabase()
+    public function cleanup()
     {
         $this->db->update('DELETE FROM catalogue');
     }
@@ -28,7 +28,7 @@ class WebBasketContext extends MinkContext implements Context
     {
         $productHash = $table->getRowsHash();
 
-        $aProduct = new CatalogueRecord(
+        $aProduct = new Product(
             new Sku($productHash['sku']),
             new Cost(mb_substr($productHash['cost'], 1))
         );
