@@ -29,8 +29,8 @@ class Cost
         return $this->float > $threshold->float;
     }
 
-    public function toFloat() : float
+    public function __toString()
     {
-        return $this->float;
+        return (string) $this->float;
     }
 }

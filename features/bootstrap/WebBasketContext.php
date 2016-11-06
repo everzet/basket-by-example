@@ -10,7 +10,7 @@ class WebBasketContext extends MinkContext implements Context
 
     public function __construct()
     {
-        $this->db = new Sqlite();
+        $this->db = new Sqlite(__DIR__ . '/../../db_test.sqlite');
     }
 
     /**
@@ -40,10 +40,10 @@ class WebBasketContext extends MinkContext implements Context
     }
 
     /**
-     * @When I click :link inside :css
+     * @When I click :css
      */
-    public function iClickInside($link, $css)
+    public function iClick($css)
     {
-        $this->getSession()->getPage()->find('css', $css)->clickLink($link);
+        $this->getSession()->getPage()->find('css', $css)->click();
     }
 }

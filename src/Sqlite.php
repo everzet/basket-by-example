@@ -1,18 +1,17 @@
 <?php
 
-use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
 
 class Sqlite
 {
     private $connection;
 
-    public function __construct()
+    public function __construct(string $db)
     {
         $this->connection = DriverManager::getConnection([
             'user'     => 'root',
             'password' => null,
-            'path'     => __DIR__ . '/../db.sqlite',
+            'path'     => $db,
             'driver'   => 'pdo_sqlite',
         ]);
     }

@@ -14,16 +14,7 @@ class BasketController
         $productStrings = $this->db->query('SELECT product FROM catalogue');
         $products = array_map([Product::class, 'fromString'], $productStrings);
 
-        $html = implode('', array_map(function (Product $product) {
-            return "
-                <li class='product'>
-                    <span>{$product->sku()}</span>
-                    <a href='/catalogue/{$product->sku()}/add-to-basket'>Add to basket</a>
-                </li>
-            ";
-        }, $products));
-
-        return "<ul>{$html}</ul>";
+        return $this->renderTemplate('catalogue', ['products' => $products]);
     }
 
     public function addToBasket(string $sku)
@@ -34,6 +25,16 @@ class BasketController
         $basket = new Basket();
         $basket->addProduct($aProduct);
 
-        return "<span>Total cost: £{$basket->total()->toFloat()}</span>";
+        return $this->renderTemplate('basket', ['basket' => $basket]);
+    }
+
+    private function renderTemplate(string $template, array $parameters) : string
+    {
+        ob_start();
+
+        extract($parameters);
+        include(__DIR__ . '/../templates/' . $template . '.html.php');
+
+        return ob_get_clean();
     }
 }
