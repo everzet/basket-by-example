@@ -16,9 +16,9 @@ class Cost
         return new Cost($this->float + $anotherCost->float);
     }
 
-    public function addPercent($percent) : self
+    public function percent(int $percent) : self
     {
-        return new Cost($this->float + (($this->float / 100) * $percent));
+        return new Cost(($this->float / 100) * $percent);
     }
 
     public function isFree() : bool

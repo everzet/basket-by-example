@@ -16,27 +16,34 @@ class Basket
         $this->total = $this->total->add($aProduct->cost());
     }
 
-    public function total() : Cost
+    public function productsCost() : Cost
     {
-        if ($this->total->isFree()) {
-            return $this->total;
-        }
-
-        return $this->totalWithVAT()->add($this->deliveryCost());
+        return $this->total;
     }
 
-    private function totalWithVAT() : Cost
+    public function VAT() : Cost
     {
-        return $this->total->addPercent(20);
+        return $this->total->percent(20);
     }
 
-    private function deliveryCost() : Cost
+    public function deliveryCost() : Cost
     {
         if ($this->total->isGreaterThan($this->cheapDeliveryThreshold())) {
             return $this->cheapDeliveryCost();
+        } else {
+            return $this->normalDeliveryCost();
+        }
+    }
+
+    public function totalCost() : Cost
+    {
+        if ($this->total->isFree()) {
+            return $this->productsCost();
         }
 
-        return $this->normalDeliveryCost();
+        return $this->productsCost()
+            ->add($this->VAT())
+            ->add($this->deliveryCost());
     }
 
     private function cheapDeliveryThreshold() : Cost
