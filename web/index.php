@@ -21,6 +21,9 @@ function render_template(string $template, array $parameters) : string
 
 $controller = new Controller(new Sqlite(__DIR__ . "/../db_{$app['env']}.sqlite"));
 
+$app->get('/', function () use ($app) {
+    return $app->redirect('/catalogue');
+});
 $app->get('/catalogue', [$controller, 'showCatalogue']);
 $app->get('/catalogue/{sku}/add-to-basket', [$controller, 'addToBasket']);
 
