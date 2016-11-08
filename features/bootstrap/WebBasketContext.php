@@ -6,7 +6,7 @@ use Basket\Sku;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
-use Web\Sqlite;
+use Web\Database;
 
 class WebBasketContext extends MinkContext implements Context
 {
@@ -14,7 +14,7 @@ class WebBasketContext extends MinkContext implements Context
 
     public function __construct(string $env)
     {
-        $this->db = new Sqlite(__DIR__ . "/../../db_{$env}.sqlite");
+        $this->db = new Database(__DIR__ . "/../../db_{$env}.sqlite");
     }
 
     /**

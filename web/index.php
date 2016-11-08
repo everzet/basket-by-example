@@ -1,7 +1,7 @@
 <?php
 
 use Web\Controller;
-use Web\Sqlite;
+use Web\Database;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -25,7 +25,7 @@ function render_template(string $template, array $parameters) : string
     return ob_get_clean();
 }
 
-$controller = new Controller(new Sqlite(DATABASE));
+$controller = new Controller(new Database(DATABASE));
 
 $app->get('/', function () use ($app) {
     return $app->redirect(ROOT_CONTROLLER . "/catalogue");
