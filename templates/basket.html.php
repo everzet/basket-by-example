@@ -12,7 +12,7 @@
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/catalogue">Catalogue</a></li>
+                <li class="breadcrumb-item"><a href="<?= ROOT_CONTROLLER ?>/catalogue">Catalogue</a></li>
                 <li class="breadcrumb-item active">Basket</li>
             </ol>
 
