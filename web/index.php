@@ -15,7 +15,15 @@ if (!defined('DATABASE')) {
     define('DATABASE', __DIR__ . "/../db_prod.sqlite");
 }
 
-$controller = new Controller(new Database(DATABASE));
+$database = new Database(DATABASE);
+$catalogue = class_exists(Web\DatabaseCatalogue::class) ? new Web\DatabaseCatalogue($database) : null;
+$reflection = new ReflectionClass(Controller::class);
+
+if (Database::class == $reflection->getConstructor()->getParameters()[0]->getClass()->getName()) {
+    $controller = $reflection->newInstance($database, $catalogue);
+} else {
+    $controller = $reflection->newInstance($catalogue);
+}
 
 $app->get('/', function () use ($app) {
     return $app->redirect(ROOT_CONTROLLER . "/catalogue");
