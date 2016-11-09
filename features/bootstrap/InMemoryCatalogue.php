@@ -3,6 +3,7 @@
 use Basket\Catalogue;
 use Basket\Product;
 use Basket\Sku;
+use Doctrine\Common\Collections\Collection;
 use Everzet\PersistedObjects\InMemoryRepository;
 use Everzet\PersistedObjects\ObjectIdentifier;
 
@@ -20,7 +21,7 @@ class InMemoryCatalogue implements Catalogue, ObjectIdentifier
         $this->storage->save($product);
     }
 
-    public function getAllProducts() : array
+    public function getAllProducts() : Collection
     {
         return $this->storage->getAll();
     }
