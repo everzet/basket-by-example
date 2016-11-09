@@ -15,16 +15,6 @@ if (!defined('DATABASE')) {
     define('DATABASE', __DIR__ . "/../db_prod.sqlite");
 }
 
-function render_template(string $template, array $parameters) : string
-{
-    extract($parameters);
-
-    ob_start();
-    include(__DIR__ . '/../templates/' . $template . '.html.php');
-
-    return ob_get_clean();
-}
-
 $controller = new Controller(new Database(DATABASE));
 
 $app->get('/', function () use ($app) {

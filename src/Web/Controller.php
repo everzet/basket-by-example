@@ -21,7 +21,7 @@ class Controller
             ->query('SELECT product FROM catalogue')
             ->map($this->intoProduct());
 
-        return render_template('catalogue', ['products' => $products]);
+        return $this->render('catalogue', ['products' => $products]);
     }
 
     public function addToBasket(string $sku) : string
@@ -34,7 +34,7 @@ class Controller
         $basket = new Basket();
         $basket->addProduct($aProduct);
 
-        return render_template('basket', ['basket' => $basket]);
+        return $this->render('basket', ['basket' => $basket]);
     }
 
     private function intoProduct() : Closure
@@ -42,5 +42,15 @@ class Controller
         return function(string $productString) {
             return Product::fromString($productString);
         };
+    }
+
+    private function render(string $template, array $parameters) : string
+    {
+        extract($parameters);
+
+        ob_start();
+        include(__DIR__ . '/../../templates/' . $template . '.html.php');
+
+        return ob_get_clean();
     }
 }
