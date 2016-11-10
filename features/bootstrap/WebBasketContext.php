@@ -6,6 +6,7 @@ use Basket\Sku;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
+use Money\Money;
 use Web\Database;
 
 class WebBasketContext extends MinkContext implements Context
@@ -33,7 +34,7 @@ class WebBasketContext extends MinkContext implements Context
         $sku = $table->getRowsHash()['sku'];
         $cost = mb_substr($table->getRowsHash()['cost'], 1);
 
-        $product = new Product(new Sku($sku), new Cost($cost));
+        $product = new Product(new Sku($sku), new Cost(Money::GBP($cost * 100)));
 
         $this->database->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
             'sku'     => $product->sku(),

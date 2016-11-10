@@ -20,7 +20,7 @@
             <div class="list-group">
                 <?php foreach ($products as $product): ?>
                     <a class="list-group-item list-group-item-action product" href="<?= ROOT_CONTROLLER ?>/catalogue/<?= $product->sku() ?>/add-to-basket">
-                        <span class="tag tag-default tag-pill float-xs-right">£<?= $product->cost() ?></span>
+                        <span class="tag tag-default tag-pill float-xs-right"><?= $product->cost() ?></span>
                         Add <strong><?= $product->sku() ?></strong> to basket
                     </a>
                 <?php endforeach; ?>

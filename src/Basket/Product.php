@@ -27,7 +27,6 @@ class Product
     {
         return serialize($this);
     }
-
     public static function fromString(string $string = null)
     {
         $closure = function (string $string) {

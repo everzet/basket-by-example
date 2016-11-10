@@ -2,33 +2,38 @@
 
 namespace Basket;
 
+use Money\Money;
+
 class Basket
 {
-    private $total;
+    private $productsCost;
 
     public function __construct()
     {
-        $this->total = new Cost();
+        $this->productsCost = new Cost(Money::GBP(0));
     }
 
-    public function addProduct(Product $product)
+    public function withProduct(Product $product) : Basket
     {
-        $this->total = $this->total->add($product->cost());
+        $newBasket = new Basket();
+        $newBasket->productsCost = $this->productsCost->plus($product->cost());
+
+        return $newBasket;
     }
 
     public function productsCost() : Cost
     {
-        return $this->total;
+        return $this->productsCost;
     }
 
     public function VAT() : Cost
     {
-        return $this->total->percent(20);
+        return $this->productsCost->percent(20);
     }
 
     public function deliveryCost() : Cost
     {
-        if ($this->total->isGreaterThan($this->cheapDeliveryThreshold())) {
+        if ($this->productsCost->isGreaterThan($this->cheapDeliveryThreshold())) {
             return $this->cheapDeliveryCost();
         } else {
             return $this->normalDeliveryCost();
@@ -37,27 +42,27 @@ class Basket
 
     public function totalCost() : Cost
     {
-        if ($this->total->isFree()) {
+        if ($this->productsCost->isZero()) {
             return $this->productsCost();
         }
 
         return $this->productsCost()
-            ->add($this->VAT())
-            ->add($this->deliveryCost());
+            ->plus($this->VAT())
+            ->plus($this->deliveryCost());
     }
 
     private function cheapDeliveryThreshold() : Cost
     {
-        return new Cost(10);
+        return new Cost(Money::GBP(1000));
     }
 
     private function cheapDeliveryCost() : Cost
     {
-        return new Cost(2);
+        return new Cost(Money::GBP(200));
     }
 
     private function normalDeliveryCost() : Cost
     {
-        return new Cost(3);
+        return new Cost(Money::GBP(300));
     }
 }

@@ -2,37 +2,46 @@
 
 namespace Basket;
 
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
+use NumberFormatter;
+
 class Cost
 {
-    private $float;
+    private $money;
 
-    public function __construct(float $float = 0.0)
+    public function __construct(Money $money)
     {
-        $this->float = $float;
+        $this->money = $money;
     }
 
-    public function add(Cost $anotherCost) : self
+    public function plus(Cost $anotherCost) : self
     {
-        return new Cost($this->float + $anotherCost->float);
+        return new Cost($this->money->add($anotherCost->money));
     }
 
     public function percent(int $percent) : self
     {
-        return new Cost(($this->float / 100) * $percent);
+        return new Cost($this->money->allocate([$percent, 100 - $percent])[0]);
     }
 
-    public function isFree() : bool
+    public function isZero() : bool
     {
-        return 0 == $this->float;
+        return $this->money->isZero();
     }
 
-    public function isGreaterThan(Cost $threshold) : bool
+    public function isGreaterThan(Cost $anotherCost) : bool
     {
-        return $this->float > $threshold->float;
+        return $this->money->greaterThan($anotherCost->money);
     }
 
     public function __toString()
     {
-        return (string)$this->float;
+        $currencies = new ISOCurrencies();
+        $numberFormatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
+
+        return $moneyFormatter->format($this->money);
     }
 }
