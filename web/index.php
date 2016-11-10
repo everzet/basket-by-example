@@ -1,6 +1,7 @@
 <?php
 
 use Basket\Basket;
+use Basket\Catalogue;
 use Web\Controller;
 use Web\Database;
 use Web\DatabaseCatalogue;
@@ -18,11 +19,11 @@ if (!defined('DATABASE')) {
 }
 
 $basket = new Basket();
-$catalogue = class_exists(DatabaseCatalogue::class) ? new DatabaseCatalogue($database) : null;
 $database = new Database(DATABASE);
+$catalogue = class_exists(DatabaseCatalogue::class) ? new DatabaseCatalogue($database) : null;
 
 $reflection = new ReflectionClass(Controller::class);
-if (DatabaseCatalogue::class == $reflection->getConstructor()->getParameters()[1]->getClass()->getName()) {
+if (Catalogue::class == $reflection->getConstructor()->getParameters()[1]->getClass()->getName()) {
     $controller = $reflection->newInstance($basket, $catalogue);
 } else {
     $controller = $reflection->newInstance($basket, $database, $catalogue);
