@@ -21,7 +21,7 @@ class Basket
         return $newBasket;
     }
 
-    public function productsCost() : Cost
+    public function rawProductsCost() : Cost
     {
         return $this->productsCost;
     }
@@ -43,10 +43,10 @@ class Basket
     public function totalCost() : Cost
     {
         if ($this->productsCost->isZero()) {
-            return $this->productsCost();
+            return $this->rawProductsCost();
         }
 
-        return $this->productsCost()
+        return $this->rawProductsCost()
             ->plus($this->VAT())
             ->plus($this->deliveryCost());
     }

@@ -19,7 +19,7 @@
             <div class="jumbotron">
                 <h1 class="display-3">Basket</h1>
                 <hr class="my-2">
-                <p class="lead">Products raw cost: <strong><?= $basket->productsCost() ?></strong></p>
+                <p class="lead">Products raw cost: <strong><?= $basket->rawProductsCost() ?></strong></p>
                 <p class="lead">VAT: <strong><?= $basket->VAT() ?></strong></p>
                 <p class="lead">Delivery cost: <strong><?= $basket->deliveryCost() ?></strong></p>
                 <p class="lead">Total cost: <strong><?= $basket->totalCost() ?></strong></p>

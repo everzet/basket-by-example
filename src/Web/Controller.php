@@ -32,7 +32,9 @@ class Controller
             ->map(Product::fromString())
             ->current();
 
-        return $this->render('basket', ['basket' => $this->basket->withProduct($product)]);
+        $this->basket = $this->basket->withProduct($product);
+
+        return $this->render('basket', ['basket' => $this->basket]);
     }
 
     private function render(string $template, array $parameters) : string

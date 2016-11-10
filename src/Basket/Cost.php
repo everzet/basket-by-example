@@ -16,12 +16,12 @@ class Cost
         $this->money = $money;
     }
 
-    public function plus(Cost $anotherCost) : self
+    public function plus(Cost $anotherCost) : Cost
     {
         return new Cost($this->money->add($anotherCost->money));
     }
 
-    public function percent(int $percent) : self
+    public function percent(int $percent) : Cost
     {
         return new Cost($this->money->allocate([$percent, 100 - $percent])[0]);
     }
