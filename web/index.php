@@ -1,7 +1,9 @@
 <?php
 
+use Basket\Basket;
 use Web\Controller;
 use Web\Database;
+use Web\DatabaseCatalogue;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -15,14 +17,15 @@ if (!defined('DATABASE')) {
     define('DATABASE', __DIR__ . "/../db_prod.sqlite");
 }
 
+$basket = new Basket();
+$catalogue = class_exists(DatabaseCatalogue::class) ? new DatabaseCatalogue($database) : null;
 $database = new Database(DATABASE);
-$catalogue = class_exists(Web\DatabaseCatalogue::class) ? new Web\DatabaseCatalogue($database) : null;
-$reflection = new ReflectionClass(Controller::class);
 
-if (Database::class == $reflection->getConstructor()->getParameters()[0]->getClass()->getName()) {
-    $controller = $reflection->newInstance($database, $catalogue);
+$reflection = new ReflectionClass(Controller::class);
+if (DatabaseCatalogue::class == $reflection->getConstructor()->getParameters()[1]->getClass()->getName()) {
+    $controller = $reflection->newInstance($basket, $catalogue);
 } else {
-    $controller = $reflection->newInstance($catalogue);
+    $controller = $reflection->newInstance($basket, $database, $catalogue);
 }
 
 $app->get('/', function () use ($app) {

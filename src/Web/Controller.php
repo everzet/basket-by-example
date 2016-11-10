@@ -4,44 +4,37 @@ namespace Web;
 
 use Basket\Basket;
 use Basket\Product;
-use Closure;
 
 class Controller
 {
-    private $db;
+    private $basket;
+    private $database;
 
-    public function __construct(Database $db)
+    public function __construct(Basket $basket, Database $database)
     {
-        $this->db = $db;
+        $this->basket = $basket;
+        $this->database = $database;
     }
 
     public function showCatalogue() : string
     {
-        $products = $this->db
+        $products = $this->database
             ->query('SELECT product FROM catalogue')
-            ->map($this->intoProduct());
+            ->map(Product::fromString());
 
         return $this->render('catalogue', ['products' => $products]);
     }
 
     public function addToBasket(string $sku) : string
     {
-        $aProduct = $this->db
+        $product = $this->database
             ->query('SELECT product FROM catalogue WHERE sku = :sku', ['sku' => $sku])
-            ->map($this->intoProduct())
+            ->map(Product::fromString())
             ->current();
 
-        $basket = new Basket();
-        $basket->addProduct($aProduct);
+        $this->basket->addProduct($product);
 
-        return $this->render('basket', ['basket' => $basket]);
-    }
-
-    private function intoProduct() : Closure
-    {
-        return function(string $productString) {
-            return Product::fromString($productString);
-        };
+        return $this->render('basket', ['basket' => $this->basket]);
     }
 
     private function render(string $template, array $parameters) : string

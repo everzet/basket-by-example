@@ -10,11 +10,19 @@ use Web\Database;
 
 class WebBasketContext extends MinkContext implements Context
 {
-    private $db;
+    private $database;
 
-    public function __construct(string $env)
+    public function __construct(string $dbFile)
     {
-        $this->db = new Database(__DIR__ . "/../../db_{$env}.sqlite");
+        $this->database = new Database($dbFile);
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function cleanup()
+    {
+        $this->database->update('DELETE FROM catalogue');
     }
 
     /**
@@ -22,16 +30,14 @@ class WebBasketContext extends MinkContext implements Context
      */
     public function thereIsAProduct(TableNode $table)
     {
-        $productHash = $table->getRowsHash();
+        $sku = $table->getRowsHash()['sku'];
+        $cost = mb_substr($table->getRowsHash()['cost'], 1);
 
-        $aProduct = new Product(
-            new Sku($productHash['sku']),
-            new Cost(mb_substr($productHash['cost'], 1))
-        );
+        $product = new Product(new Sku($sku), new Cost($cost));
 
-        $this->db->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
-            'sku'     => $aProduct->sku(),
-            'product' => $aProduct
+        $this->database->update('INSERT INTO catalogue(sku, product) VALUES(:sku, :product)', [
+            'sku'     => $product->sku(),
+            'product' => $product
         ]);
     }
 
@@ -41,13 +47,5 @@ class WebBasketContext extends MinkContext implements Context
     public function iClick($css)
     {
         $this->getSession()->getPage()->find('css', $css)->click();
-    }
-
-    /**
-     * @AfterScenario
-     */
-    public function cleanup()
-    {
-        $this->db->update('DELETE FROM catalogue');
     }
 }

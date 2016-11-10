@@ -2,7 +2,8 @@ default:
     suites:
         web:
             contexts:
-                - WebBasketContext: [ 'test' ]
+                - WebBasketContext:
+                    dbFile: '%paths.base%/db_test.sqlite'
 
     extensions:
         Behat\MinkExtension:

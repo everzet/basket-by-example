@@ -13,11 +13,6 @@ class Product
         $this->cost = $cost;
     }
 
-    public static function fromString(string $string)
-    {
-        return unserialize($string);
-    }
-
     public function sku() : Sku
     {
         return $this->sku;
@@ -31,5 +26,18 @@ class Product
     public function __toString()
     {
         return serialize($this);
+    }
+
+    public static function fromString(string $string = null)
+    {
+        $closure = function (string $string) {
+            return unserialize($string);
+        };
+
+        if ($string) {
+            return $closure($string);
+        }
+
+        return $closure;
     }
 }

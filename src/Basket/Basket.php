@@ -11,9 +11,9 @@ class Basket
         $this->total = new Cost();
     }
 
-    public function addProduct(Product $aProduct)
+    public function addProduct(Product $product)
     {
-        $this->total = $this->total->add($aProduct->cost());
+        $this->total = $this->total->add($product->cost());
     }
 
     public function productsCost() : Cost
