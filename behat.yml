@@ -1,6 +1,8 @@
 default:
     suites:
+        #domain: { contexts: [ 'DomainBasketContext' ] }
         web:
+            #filters: { tags: '@web' }
             contexts:
                 - WebBasketContext:
                     dbFile: '%paths.base%/db_test.sqlite'
@@ -9,5 +11,4 @@ default:
         Behat\MinkExtension:
             base_url: 'http://localhost:8000/index_test.php'
             sessions:
-                default:
-                    selenium2: { browser: 'chrome' }
+                default: { selenium2: { browser: 'chrome' } }
